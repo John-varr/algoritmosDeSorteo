@@ -91,3 +91,95 @@ void Ordenador::ordenamientoPorMezcla(uint32_t *A, uint32_t n) const {
     }
     mergeSortRec(A, 0u, n - 1u);
 }
+
+void Ordenador::heapify(uint32_t *A, uint32_t n, uint32_t i) const {
+    uint32_t largestIndex = i;
+    uint32_t leftChild = 2 * i + 1;
+    uint32_t rightChild = 2 * i + 2;
+
+    if (leftChild < n) {
+        if (A[leftChild] > A[largestIndex]) {
+            largestIndex = leftChild;
+        }
+    }
+    if (rightChild < n) {
+        if (A[rightChild] > A[largestIndex]) {
+            largestIndex = rightChild;
+        }
+    }
+
+    if (largestIndex != i) {
+        uint32_t temp = A[i];
+        A[i] = A[largestIndex];
+        A[largestIndex] = temp;
+
+        heapify(A, n, largestIndex);
+    }
+}
+
+void Ordenador::ordenamientoPorMonticulos(uint32_t *A, uint32_t n) const {
+    if (n == 0) {
+        return;
+    }
+
+    for (int buildIndex = static_cast<int>(n) / 2 - 1; buildIndex >= 0; buildIndex--) {
+        heapify(A, n, static_cast<uint32_t>(buildIndex));
+    }
+
+    for (int endIndex = static_cast<int>(n) - 1; endIndex > 0; endIndex--) {
+        uint32_t tmp = A[0];
+        A[0] = A[endIndex];
+        A[endIndex] = tmp;
+
+        heapify(A, static_cast<uint32_t>(endIndex), 0u);
+    }
+}
+
+uint32_t Ordenador::partition(uint32_t *A, uint32_t low, uint32_t high) const {
+    uint32_t pivotValue = A[high];
+    int iIndex = static_cast<int>(low) - 1;
+
+    for (uint32_t jIndex = low; jIndex < high; jIndex++) {
+        if (A[jIndex] < pivotValue) {
+            iIndex++;
+            uint32_t tmp = A[iIndex];
+            A[iIndex] = A[jIndex];
+            A[jIndex] = tmp;
+        }
+    }
+
+    uint32_t tmp = A[iIndex + 1];
+    A[iIndex + 1] = A[high];
+    A[high] = tmp;
+
+    return static_cast<uint32_t>(iIndex + 1);
+}
+
+void Ordenador::quickSortRec(uint32_t *A, uint32_t low, uint32_t high) const {
+    if (low < high) {
+        uint32_t pivotIndex = partition(A, low, high);
+
+        if (pivotIndex > 0u) {
+            quickSortRec(A, low, pivotIndex - 1u);
+        }
+        quickSortRec(A, pivotIndex + 1u, high);
+    }
+}
+
+
+void Ordenador::ordenamientoRapido(uint32_t *A, uint32_t n) const {
+    if (n <= 1) {
+        return;
+    }
+    quickSortRec(A, 0u, n - 1u);
+}
+
+uint32_t Ordenador::getMax(uint32_t *A, uint32_t n) const {
+    uint32_t maxValue = A[0];
+    for (uint32_t idx = 1; idx < n; idx++) {
+        if (A[idx] > maxValue) {
+            maxValue = A[idx];
+        }
+    }
+    return maxValue;
+}

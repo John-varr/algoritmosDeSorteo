@@ -11,6 +11,10 @@ class Ordenador {
     private:
       void merge(uint32_t *, uint32_t, uint32_t, uint32_t) const;
       void mergeSortRec(uint32_t *, uint32_t, uint32_t) const;
+      void heapify(uint32_t *, uint32_t, uint32_t) const;
+      uint32_t partition(uint32_t *, uint32_t, uint32_t) const;
+      void quickSortRec(uint32_t *, uint32_t, uint32_t) const;
+      uint32_t getMax(std::uint32_t *, std::uint32_t ) const;
     public:
       Ordenador() = default;
       ~Ordenador() = default;
