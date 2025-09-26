@@ -183,3 +183,51 @@ uint32_t Ordenador::getMax(uint32_t *A, uint32_t n) const {
     }
     return maxValue;
 }
+
+void Ordenador::countSortBits(uint32_t *A, uint32_t n, uint32_t shift, uint32_t r) const {
+    uint32_t K = 1u << r;
+    vector<uint32_t> count(K, 0u);
+    vector<uint32_t> output(n);
+
+    uint32_t mask = K - 1u;
+
+    for (uint32_t i = 0; i < n; i++) {
+        uint32_t digit = (A[i] >> shift) & mask;
+        count[digit] = count[digit] + 1u;
+    }
+
+    for (uint32_t i = 1; i < K; i++) {
+        count[i] = count[i] + count[i - 1];
+    }
+
+    for (int i = static_cast<int>(n) - 1; i >= 0; i--) {
+        uint32_t digit = (A[i] >> shift) & mask;
+        uint32_t dest = count[digit] - 1u;
+        output[dest] = A[i];
+        count[digit] = count[digit] - 1u;
+    }
+
+    for (uint32_t i = 0; i < n; i++) {
+        A[i] = output[i];
+    }
+}
+
+void Ordenador::ordenamientoPorResiduos(uint32_t *A, uint32_t n) const {
+    if (n == 0) {
+        return;
+    }
+
+    uint32_t r = 0u;
+    uint32_t t = n;
+    while (t > 1u) {
+        r++;
+        t = t >> 1u;
+    }
+    if (r == 0u) {
+        r = 1u;
+    }
+
+    for (uint32_t shift = 0u; shift < 32u; shift += r) {
+        countSortBits(A, n, shift, r);
+    }
+}

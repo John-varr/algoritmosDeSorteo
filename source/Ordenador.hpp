@@ -14,7 +14,8 @@ class Ordenador {
       void heapify(uint32_t *, uint32_t, uint32_t) const;
       uint32_t partition(uint32_t *, uint32_t, uint32_t) const;
       void quickSortRec(uint32_t *, uint32_t, uint32_t) const;
-      uint32_t getMax(std::uint32_t *, std::uint32_t ) const;
+      uint32_t getMax(uint32_t *, uint32_t ) const;
+      void countSortBits(uint32_t *, uint32_t, uint32_t, uint32_t) const;
     public:
       Ordenador() = default;
       ~Ordenador() = default;
